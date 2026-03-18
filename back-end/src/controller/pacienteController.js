@@ -1,5 +1,5 @@
-const PacienteService = require('../service/PacienteService')
-const { toResponse, toListResponse } = require('../dto/PacienteDTO')
+const PacienteService = require('../service/pacienteService')
+const { toResponse, toListResponse } = require('../dto/pacienteDTO')
 
 class PacienteController {
   
@@ -104,7 +104,7 @@ class PacienteController {
       return res.status(200).json({
         sucesso: true,
         mensagem: 'Paciente atualizado com sucesso',
-        dados: paciente,
+        dados: toResponse(paciente),
       })
     } catch (erro) {
       console.error('Erro ao atualizar paciente:', erro.message)

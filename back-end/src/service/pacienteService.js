@@ -1,27 +1,20 @@
-const PacienteRepository = require('../repository/PacienteRepository')
+const PacienteRepository = require('../repository/pacienteRepository')
 const { validarPaciente } = require('../validators/pacienteValidator')
 
 class PacienteService {
 
-  async criar(dados) {
-    const validacao = validarPaciente(dados)
-
-    if (!validacao.valido) {
-      const erro = new Error('Dados inválidos')
-      erro.detalhes = validacao.erros
-      throw erro
+ async criar(dados) {
+        const validacao = validarPaciente(dados);
+         
+        
+        if (!validacao.valido) {
+        const erro = new Error('Dados inválidos');
+        erro.detalhes = validacao.erros;
+        throw erro;
     }
 
-    const pacienteExistente = await PacienteRepository.buscarPorCPF(dados.cpf)
-
-    if (pacienteExistente) {
-      const erro = new Error('CPF já cadastrado')
-      erro.detalhes = [`Já existe um paciente com o CPF ${dados.cpf}`]
-      throw erro
+    return await PacienteRepository.criar(dados);
     }
-
-    return await PacienteRepository.criar(dados)
-  }
 
   async buscarTodos(pagina = 1, limite = 10) {
     pagina = Math.max(1, parseInt(pagina) || 1)
@@ -47,11 +40,7 @@ class PacienteService {
   }
 
   async buscarPorId(id) {
-    if (!id || isNaN(id)) {
-      const erro = new Error('ID inválido')
-      erro.status = 400
-      throw erro
-    }
+
 
     const paciente = await PacienteRepository.buscarPorId(id)
 
@@ -64,35 +53,26 @@ class PacienteService {
     return paciente
   }
 
-  async atualizar(id, dados) {
-    const paciente = await this.buscarPorId(id)
+async atualizar(id, dados) {
+  const paciente = await this.buscarPorId(id)
 
-    if (dados.cpf && dados.cpf !== paciente.cpf) {
-      const cpfDuplicado = await PacienteRepository.buscarPorCPF(dados.cpf)
-      if (cpfDuplicado) {
-        const erro = new Error('CPF já cadastrado')
-        erro.detalhes = [`Já existe um paciente com o CPF ${dados.cpf}`]
-        throw erro
-      }
+  if (Object.keys(dados).length > 0) {
+    const validacao = validarPaciente({
+      nome: dados.nome ?? paciente.nome,
+      cpf: dados.cpf ?? paciente.cpf,
+      dataNascimento: dados.dataNascimento ?? paciente.dataNascimento,
+      plano: dados.plano ?? paciente.plano,
+    })
+
+    if (!validacao.valido) {
+      const erro = new Error('Dados inválidos')
+      erro.detalhes = validacao.erros
+      throw erro
     }
-
-    if (Object.keys(dados).length > 0) {
-      const validacao = validarPaciente({
-        nome: dados.nome || paciente.nome,
-        cpf: dados.cpf || paciente.cpf,
-        dataNascimento: dados.dataNascimento || paciente.dataNascimento,
-        plano: dados.plano || paciente.plano,
-      })
-
-      if (!validacao.valido) {
-        const erro = new Error('Dados inválidos')
-        erro.detalhes = validacao.erros
-        throw erro
-      }
-    }
-
-    return await PacienteRepository.atualizar(id, dados)
   }
+
+  return await PacienteRepository.atualizar(id, dados)
+}
 
   async deletar(id) {
     await this.buscarPorId(id)

@@ -1,20 +1,20 @@
 const express = require('express')
 const router = express.Router()
-const PacienteController = require('../controller/PacienteController')
+const pacienteController = require('../controller/pacienteController')
 
 
-router.post('/', PacienteController.criar.bind(PacienteController))
+router.post('/', pacienteController.criar.bind(pacienteController))
 
 
-router.get('/', PacienteController.buscarTodos.bind(PacienteController))
+router.get('/', pacienteController.buscarTodos.bind(pacienteController))
 
 
-router.get('/:id', PacienteController.buscarPorId.bind(PacienteController))
+router.get('/:id', pacienteController.buscarPorId.bind(pacienteController))
 
 
-router.put('/:id', PacienteController.atualizar.bind(PacienteController))
+router.put('/:id', pacienteController.atualizar.bind(pacienteController))
 
 
-router.delete('/:id', PacienteController.deletar.bind(PacienteController))
+router.delete('/:id', pacienteController.deletar.bind(pacienteController))
 
 module.exports = router

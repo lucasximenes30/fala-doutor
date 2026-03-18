@@ -6,7 +6,8 @@ const cors = require('cors')
 const { connectDB } = require('./config/database')
 
 
-const pacienteRoutes = require('./routes/PacienteRoutes')
+const pacienteRoutes = require('./routes/pacienteRoutes')
+const medicoRoutes = require('./routes/medicoRoutes')
 
 const app = express()
 const PORT = process.env.PORT || 3000
@@ -30,6 +31,8 @@ app.get('/', (req, res) => {
 // Rotas de Paciente
 app.use('/pacientes', pacienteRoutes)
 
+//Rotas de Médico
+app.use('/medicos', medicoRoutes)
 
 app.use((req, res) => {
   res.status(404).json({
@@ -48,7 +51,8 @@ async function iniciarServidor() {
     // Iniciar servidor
     app.listen(PORT, () => {
       console.log(`\nServidor rodando em: http://localhost:${PORT}`)
-      console.log(`API de Pacientes disponível em: http://localhost:${PORT}/pacientes\n`)
+      console.log(`API de Pacientes disponível em: http://localhost:${PORT}/pacientes`)
+      console.log(`API de Médicos disponível em: http://localhost:${PORT}/medicos\n`)
     })
   } catch (erro) {
     console.error('Erro ao iniciar servidor:', erro)

@@ -24,7 +24,7 @@ class MedicoRepository {
 
     async buscarTodos({ skip = 0, take = 10 } = {}) {
         try {
-            const medicos = await prisma.paciente.findMany({
+            const medicos = await prisma.medico.findMany({
                 skip,
                 take,
                 orderBy: { id: 'desc' },

@@ -1,5 +1,6 @@
 const medicoRepository = require('../repository/medicoRepository');
 const { validarMedico } = require('../validators/medicoValidator');
+const { prisma } = require('../config/database');
 
 class MedicoService {
     
@@ -38,4 +39,49 @@ class MedicoService {
             porPagina: limite,
         }
     }
+
+    async buscarPorId(id) {
+        
+        const medico = await medicoRepository.buscarPorId(id);
+        
+        if (!medico) {
+            const erro = new Error('Médico não encontrado');
+            erro.status = 404;
+            throw erro;
+        }
+        return medico;
+    }
+
+    async atualizar(id, dados) {
+        const medico = await this.buscarPorId(id);
+    
+        if ( Object.keys(dados).length > 0) {
+            const validacao = validarMedico({
+                nome: dados.nome ?? medico.nome,
+                cpf: dados.cpf ?? medico.cpf,
+                crm: dados.crm ?? medico.crm,
+                dataNascimento: dados.dataNascimento ?? medico.dataNascimento,
+                plano: dados.plano ?? medico.plano,
+            })
+
+            if (!validacao.valido) {
+                const erro = new Error('Dados inválidos');
+                erro.detalhes = validacao.erros;
+                throw erro;
+            }
+        }
+
+        return await medicoRepository.atualizar(id, dados);
+    }
+
+    async deletar(id) {
+        await this.buscarPorId(id);
+        return await medicoRepository.deletar(id);
+    }
+
+    async contarTotal() {
+        const total = await prisma.medico.count();
+        return total;
+    }
 }
+module.exports = new MedicoService()
