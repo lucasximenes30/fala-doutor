@@ -10,11 +10,22 @@ datasource db {
 
 
 model paciente {
-  id              String   @id @default(uuid()) @db.Uuid
-  nome           String   @db.VarChar(255)
-  cpf             String   @unique @db.VarChar(11)
+  id   String   @id @default(uuid()) @db.Uuid
+  nome String   @db.VarChar(255)
+  cpf  String   @unique @db.VarChar(11)
   dataNascimento  DateTime
-  plano           Int
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  plano Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model medico {
+  id String @id @default(uuid()) @db.Uuid
+  nome String @db.VarChar(255)
+  cpf String @unique @db.VarChar(11)
+  crm String @unique @db.VarChar(30)
+  dataNascimento  DateTime
+  plano Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
