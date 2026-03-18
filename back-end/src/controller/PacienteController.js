@@ -22,7 +22,7 @@ class PacienteController {
     return res.status(201).json({
       sucesso: true,
       mensagem: 'Paciente criado com sucesso',
-      dados: toResponse(paciente), // 👈 AQUI FOI A TROCA
+      dados: toResponse(paciente), 
     })
   } catch (erro) {
     console.error('Erro ao criar paciente:', erro.message)

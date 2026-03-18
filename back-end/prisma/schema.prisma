@@ -1,4 +1,4 @@
-// Define o provider do banco (PostgreSQL) e a URL de conexã
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,18 +8,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// ===== MODELO DE PACIENTE =====
-// Este modelo vai gerar uma tabela 'Paciente' no banco de dados
-// Cada campo abaixo corresponde a uma coluna na tabela
-model Paciente {
-  id              Int       @id @default(autoincrement())  // ID único, auto-incrementado
-  nome            String    @db.VarChar(255)               // Nome do paciente (máximo 255 caracteres)
-  cpf             String    @unique @db.VarChar(11)        // CPF único (11 dígitos)
-  dataNascimento  DateTime                                  // Data de nascimento
-  plano           Int                                       // Plano (1, 2 ou 3)
-  createdAt       DateTime  @default(now())                // Data de criação (automático)
-  updatedAt       DateTime  @updatedAt                      // Data de atualização (automático)
 
-  // Relacionamentos (para o futuro)
-  // medicos       Medico[]  // Um Paciente pode ter vários Médicos associados
+model paciente {
+  id              String   @id @default(uuid()) @db.Uuid
+  nome           String   @db.VarChar(255)
+  cpf             String   @unique @db.VarChar(11)
+  dataNascimento  DateTime
+  plano           Int
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }

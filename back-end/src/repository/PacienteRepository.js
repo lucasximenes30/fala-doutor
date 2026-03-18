@@ -21,14 +21,12 @@ class PacienteRepository {
     }
   }
 
-  async buscarTodos(opcoes = {}) {
+  async buscarTodos({ skip = 0, take = 10 } = {}) {
     try {
       const pacientes = await prisma.paciente.findMany({
-        skip: opcoes.skip || 0,
-        take: opcoes.take || 10,
-        orderBy: {
-          id: 'desc', // Ordenar pelo mais recente
-        },
+        skip,
+        take,
+        orderBy: { id: 'desc' },
       })
 
       console.log(`Foram encontrados ${pacientes.length} pacientes`)
@@ -42,14 +40,14 @@ class PacienteRepository {
   async buscarPorId(id) {
     try {
       const paciente = await prisma.paciente.findUnique({
-        where: { id: parseInt(id) },
+        where: { id: Number(id) },
       })
 
-      if (paciente) {
-        console.log(`Paciente com ID ${id} encontrado`)
-      } else {
-        console.log(`Paciente com ID ${id} não encontrado`)
-      }
+      console.log(
+        paciente
+          ? `Paciente com ID ${id} encontrado`
+          : `Paciente com ID ${id} não encontrado`
+      )
 
       return paciente
     } catch (error) {
@@ -60,11 +58,9 @@ class PacienteRepository {
 
   async buscarPorCPF(cpf) {
     try {
-      const paciente = await prisma.paciente.findUnique({
-        where: { cpf: cpf },
+      return await prisma.paciente.findUnique({
+        where: { cpf },
       })
-
-      return paciente
     } catch (error) {
       console.error('Erro ao buscar paciente por CPF:', error.message)
       throw error
@@ -74,14 +70,14 @@ class PacienteRepository {
   async atualizar(id, dados) {
     try {
       const paciente = await prisma.paciente.update({
-        where: { id: parseInt(id) },
+        where: { id: Number(id) },
         data: {
-          nome: dados.nome || undefined,
-          cpf: dados.cpf || undefined,
-          dataNascimento: dados.dataNascimento
-            ? new Date(dados.dataNascimento)
-            : undefined,
-          plano: dados.plano || undefined,
+          ...(dados.nome && { nome: dados.nome }),
+          ...(dados.cpf && { cpf: dados.cpf }),
+          ...(dados.dataNascimento && {
+            dataNascimento: new Date(dados.dataNascimento),
+          }),
+          ...(dados.plano && { plano: dados.plano }),
         },
       })
 
@@ -96,7 +92,7 @@ class PacienteRepository {
   async deletar(id) {
     try {
       const paciente = await prisma.paciente.delete({
-        where: { id: parseInt(id) },
+        where: { id: Number(id) },
       })
 
       console.log(`Paciente com ID ${id} deletado`)
