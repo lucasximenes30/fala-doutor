@@ -234,27 +234,6 @@ Credenciais padrão:
 - **Banco**: faladoutor
 - **Host**: localhost:5432
 
-## 🐛 Troubleshooting
-
-### Erro ao conectar ao banco
-- Certifique-se de que o Docker está rodando: `docker ps`
-- Verifique se a porta 5432 não está em uso
-
-### Erro na migração Prisma
-```bash
-# Reset do banco (cuidado: deleta todos os dados!)
-npx prisma migrate reset
-```
-
-### Porta 3000 ou 5173 já em uso
-- Altere as portas em `back-end/app.js` e `front-end/vite.config.js`
-
-## 📖 Documentação Adicional
-
-- [Documentação do Prisma](https://www.prisma.io/docs/)
-- [Documentação do Express](https://expressjs.com/)
-- [Documentação do React](https://react.dev/)
-- [Documentação do Tailwind CSS](https://tailwindcss.com/docs)
 
 ## 👨‍💻 Autor
 
