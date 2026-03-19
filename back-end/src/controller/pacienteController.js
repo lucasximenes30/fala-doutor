@@ -50,7 +50,10 @@ class PacienteController {
       return res.status(200).json({
         sucesso: true,
         mensagem: 'Pacientes encontrados',
-        dados: resultado,
+        dados: {
+          ...resultado,
+          pacientes: toListResponse(resultado.pacientes)
+        },
       })
     } catch (erro) {
       console.error('Erro ao buscar pacientes:', erro.message)
@@ -77,7 +80,7 @@ class PacienteController {
       return res.status(200).json({
         sucesso: true,
         mensagem: 'Paciente encontrado',
-        dados: paciente,
+        dados: toResponse(paciente),
       })
     } catch (erro) {
       console.error('Erro ao buscar paciente:', erro.message)
@@ -131,7 +134,7 @@ class PacienteController {
       return res.status(200).json({
         sucesso: true,
         mensagem: 'Paciente deletado com sucesso',
-        dados: paciente,
+        dados: toResponse(paciente),
       })
     } catch (erro) {
       console.error('Erro ao deletar paciente:', erro.message)

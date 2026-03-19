@@ -71,6 +71,11 @@ async atualizar(id, dados) {
     }
   }
 
+  // Converter plano para número se existir
+  if (dados.plano) {
+    dados.plano = Number(dados.plano)
+  }
+
   return await PacienteRepository.atualizar(id, dados)
 }
 

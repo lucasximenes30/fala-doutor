@@ -71,6 +71,11 @@ class MedicoService {
             }
         }
 
+        // Converter plano para número se existir
+        if (dados.plano) {
+            dados.plano = Number(dados.plano)
+        }
+
         return await medicoRepository.atualizar(id, dados);
     }
 
