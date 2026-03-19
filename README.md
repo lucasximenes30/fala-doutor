@@ -5,9 +5,8 @@ Um sistema completo de gerenciamento de médicos e pacientes construído com **N
 ## 🎯 Características
 
 - ✅ Gerenciamento de médicos e pacientes
-- ✅ CRUD completo (Criar, Ler, Atualizar, Deletar)
+- ✅ CRUD completo
 - ✅ Validação de dados (CPF, CRM, Planos)
-- ✅ Formatação de datas em padrão brasileiro (DD/MM/YYYY)
 - ✅ Paginação de resultados
 - ✅ Interface responsiva com Tailwind CSS
 - ✅ Banco de dados com Prisma ORM
@@ -52,7 +51,6 @@ FalaDoutor/
 - **Express** - Framework web
 - **Prisma** - ORM
 - **PostgreSQL** - Banco de dados (via Docker)
-- **Joi/Validação** - Validação de dados
 
 ### Front-end
 - **React** - Biblioteca UI
