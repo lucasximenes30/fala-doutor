@@ -10,10 +10,20 @@ export default function PacienteForm({ onSubmit, onCancel, initialData }) {
 
   useEffect(() => {
     if (initialData) {
+      // Converte data ISO (1995-08-25T00:00:00.000Z) para formato de input date (1995-08-25)
+      let dataNascimentoFormatada = initialData.dataNascimento
+      if (initialData.dataNascimento && initialData.dataNascimento.includes('T')) {
+        dataNascimentoFormatada = initialData.dataNascimento.split('T')[0]
+      } else if (initialData.dataNascimento && initialData.dataNascimento.includes('/')) {
+        // Se já vem em DD/MM/YYYY do backend, converte para YYYY-MM-DD
+        const [dia, mes, ano] = initialData.dataNascimento.split('/')
+        dataNascimentoFormatada = `${ano}-${mes}-${dia}`
+      }
+      
       setFormData({
         nome: initialData.nome,
         cpf: initialData.cpf,
-        dataNascimento: initialData.dataNascimento,
+        dataNascimento: dataNascimentoFormatada,
         plano: initialData.plano,
       })
     }
@@ -39,51 +49,51 @@ export default function PacienteForm({ onSubmit, onCancel, initialData }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 max-w-2xl mx-auto">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label className="block text-gray-200 font-semibold mb-2 text-center">Nome</label>
+    <form onSubmit={handleSubmit} className="space-y-8 w-full max-w-3xl mx-auto flex flex-col items-center gap-6 py-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
+        <div className="flex flex-col items-center w-full">
+          <label className="block text-gray-400 text-sm tracking-widest uppercase font-bold mb-3">Nome</label>
           <input
             type="text"
             name="nome"
             value={formData.nome}
             onChange={handleChange}
             required
-            className="w-full px-4 py-2 bg-gray-700 border-2 border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-cyan-400 focus:bg-gray-600 outline-none transition-colors"
+            className="w-full px-5 py-4 text-center bg-gray-900 border-2 border-gray-600 rounded-xl text-white text-lg placeholder-gray-500 focus:border-cyan-400 focus:bg-gray-800 outline-none transition-all duration-300"
             placeholder="Nome completo"
           />
         </div>
-        <div>
-          <label className="block text-gray-200 font-semibold mb-2 text-center">CPF</label>
+        <div className="flex flex-col items-center w-full">
+          <label className="block text-gray-400 text-sm tracking-widest uppercase font-bold mb-3">CPF</label>
           <input
             type="text"
             name="cpf"
             value={formData.cpf}
             onChange={handleChange}
             required
-            className="w-full px-4 py-2 bg-gray-700 border-2 border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-cyan-400 focus:bg-gray-600 outline-none transition-colors"
+            className="w-full px-5 py-4 text-center bg-gray-900 border-2 border-gray-600 rounded-xl text-white text-lg placeholder-gray-500 focus:border-cyan-400 focus:bg-gray-800 outline-none transition-all duration-300"
             placeholder="000.000.000-00"
           />
         </div>
-        <div>
-          <label className="block text-gray-200 font-semibold mb-2 text-center">Data de Nascimento</label>
+        <div className="flex flex-col items-center w-full">
+          <label className="block text-gray-400 text-sm tracking-widest uppercase font-bold mb-3">Data de Nascimento</label>
           <input
             type="date"
             name="dataNascimento"
             value={formData.dataNascimento}
             onChange={handleChange}
             required
-            className="w-full px-4 py-2 bg-gray-700 border-2 border-gray-600 rounded-lg text-white focus:border-cyan-400 focus:bg-gray-600 outline-none transition-colors"
+            className="w-full px-5 py-4 text-center bg-gray-900 border-2 border-gray-600 rounded-xl text-white text-lg focus:border-cyan-400 focus:bg-gray-800 outline-none transition-all duration-300"
           />
         </div>
-        <div>
-          <label className="block text-gray-200 font-semibold mb-2 text-center">Plano</label>
+        <div className="flex flex-col items-center w-full">
+          <label className="block text-gray-400 text-sm tracking-widest uppercase font-bold mb-3">Plano</label>
           <select
             name="plano"
             value={formData.plano}
             onChange={handleChange}
             required
-            className="w-full px-4 py-2 bg-gray-700 border-2 border-gray-600 rounded-lg text-white focus:border-cyan-400 focus:bg-gray-600 outline-none transition-colors"
+            className="w-full px-5 py-4 text-center bg-gray-900 border-2 border-gray-600 rounded-xl text-gray-300 text-lg focus:border-cyan-400 focus:bg-gray-800 outline-none transition-all duration-300 appearance-none"
           >
             <option value="">Selecione um plano</option>
             <option value="1">Plano 1</option>
@@ -93,17 +103,17 @@ export default function PacienteForm({ onSubmit, onCancel, initialData }) {
         </div>
       </div>
 
-      <div className="flex gap-3 pt-4 justify-center">
+      <div className="flex gap-6 pt-12 mt-8 w-full sm:w-2/3 justify-center">
         <button
           type="submit"
-          className="px-8 bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-200"
+          className="flex-1  bg-gradient-to-r from-emerald-500 to-green-600 text-white py-4 rounded-xl font-bold text-lg hover:shadow-emerald-500/20 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
         >
           Salvar
         </button>
         <button
           type="button"
           onClick={onCancel}
-          className="px-8 bg-gray-600 text-white py-3 rounded-lg font-semibold hover:bg-gray-500 transition-colors duration-200"
+          className="flex-1 bg-gray-700 text-white py-4 rounded-xl font-bold text-lg hover:bg-gray-600 transition-colors duration-300"
         >
           Cancelar
         </button>
