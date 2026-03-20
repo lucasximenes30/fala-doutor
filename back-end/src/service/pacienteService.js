@@ -1,5 +1,6 @@
 const PacienteRepository = require('../repository/pacienteRepository')
 const { validarPaciente } = require('../validators/pacienteValidator')
+const { prisma } = require('../config/database')
 
 class PacienteService {
 
@@ -13,8 +14,21 @@ class PacienteService {
         throw erro;
     }
 
-    return await PacienteRepository.criar(dados);
+    const planoExiste = await prisma.plano.findUnique({
+        where: { id: dados.plano }
+    });
+
+    if (!planoExiste) {
+      const erro = new Error('Plano não encontrado');
+      erro.status = 404;
+      throw erro;
     }
+
+    return await PacienteRepository.criar({
+      ...dados,
+      planoId: dados.plano
+    });
+  }
 
   async buscarTodos(pagina = 1, limite = 10) {
     pagina = Math.max(1, parseInt(pagina) || 1)
@@ -61,7 +75,7 @@ async atualizar(id, dados) {
       nome: dados.nome ?? paciente.nome,
       cpf: dados.cpf ?? paciente.cpf,
       dataNascimento: dados.dataNascimento ?? paciente.dataNascimento,
-      plano: dados.plano ?? paciente.plano,
+      plano: dados.plano ?? paciente.planoId,
     })
 
     if (!validacao.valido) {
@@ -71,9 +85,16 @@ async atualizar(id, dados) {
     }
   }
 
-  // Converter plano para número se existir
-  if (dados.plano) {
-    dados.plano = Number(dados.plano)
+  if(dados.plano) {
+    const planoExiste = await prisma.plano.findUnique({
+        where: { id: dados.plano }
+    });
+
+    if (!planoExiste) {
+      const erro = new Error('Plano não encontrado');
+      erro.status = 404;
+      throw erro;
+    }
   }
 
   return await PacienteRepository.atualizar(id, dados)

@@ -7,14 +7,28 @@ class MedicoService {
     async criar(dados) {
         const validacao = validarMedico(dados);
          
-        
         if (!validacao.valido) {
-        const erro = new Error('Dados inválidos');
-        erro.detalhes = validacao.erros;
-        throw erro;
-    }
+            const erro = new Error('Dados inválidos');
+            erro.detalhes = validacao.erros;
+            throw erro;
+        }
 
-    return await medicoRepository.criar(dados);
+        // Verifica se o plano existe
+        const planoExiste = await prisma.plano.findUnique({
+            where: { id: dados.plano }
+        });
+
+        if (!planoExiste) {
+            const erro = new Error('Plano não encontrado');
+            erro.status = 404;
+            throw erro;
+        }
+
+        // Passa planoId para o repository
+        return await medicoRepository.criar({
+            ...dados,
+            planoId: dados.plano
+        });
     }
 
 
@@ -61,7 +75,7 @@ class MedicoService {
                 cpf: dados.cpf ?? medico.cpf,
                 crm: dados.crm ?? medico.crm,
                 dataNascimento: dados.dataNascimento ?? medico.dataNascimento,
-                plano: dados.plano ?? medico.plano,
+                plano: dados.plano ?? medico.planoId,
             })
 
             if (!validacao.valido) {
@@ -71,9 +85,20 @@ class MedicoService {
             }
         }
 
-        // Converter plano para número se existir
+        // Se tiver atualizando o plano, verifica se existe
         if (dados.plano) {
-            dados.plano = Number(dados.plano)
+            const planoExiste = await prisma.plano.findUnique({
+                where: { id: dados.plano }
+            });
+
+            if (!planoExiste) {
+                const erro = new Error('Plano não encontrado');
+                erro.status = 404;
+                throw erro;
+            }
+
+            dados.planoId = dados.plano;
+            delete dados.plano;
         }
 
         return await medicoRepository.atualizar(id, dados);

@@ -10,8 +10,9 @@ class MedicoRepository {
                 cpf: dados.cpf,
                 crm: dados.crm,
                 dataNascimento: new Date(dados.dataNascimento),
-                plano: dados.plano,
+                planoId: dados.planoId,
                },
+               include: { plano: true },
             })
 
             console.log(`Médico criado com ID: ${medico.id}`)
@@ -28,6 +29,7 @@ class MedicoRepository {
                 skip,
                 take,
                 orderBy: { id: 'desc' },
+                include: { plano: true },
             })
             return medicos
         }catch (error) {
@@ -41,6 +43,7 @@ class MedicoRepository {
         try {
             const medico = await prisma.medico.findUnique({
                 where: {id: id},
+                include: { plano: true },
             })
 
             return medico
@@ -59,8 +62,9 @@ class MedicoRepository {
                     ...(dados.crm && { crm: dados.crm}),
                     ...(dados.dataNascimento && { dataNascimento: new Date(dados.dataNascimento),
                     }),
-                    ...(dados.plano && { plano: dados.plano }),
-                }
+                    ...(dados.planoId && { planoId: dados.planoId }),
+                },
+                include: { plano: true },
             })
             return medico
         }catch (error) {

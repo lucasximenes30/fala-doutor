@@ -28,11 +28,15 @@ function validarMedico(dados) {
     }
 
 
-    const planoNumerico = Number(dados.plano)
-    if (![1,2,3].includes(planoNumerico)) {
-        erros.push('Plano inválido')
+    if (!dados.plano || !dados.plano.trim()) {
+        erros.push('Plano é obrigatório')
     }
-    dados.plano = planoNumerico
+
+    // Validar se é um UUID válido
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+    if (dados.plano && !uuidRegex.test(String(dados.plano).trim())) {
+        erros.push('Plano deve ser um UUID válido')
+    }
 
     return {
         valido: erros.length === 0,
