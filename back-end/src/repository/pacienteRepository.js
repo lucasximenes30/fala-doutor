@@ -9,8 +9,9 @@ class PacienteRepository {
           nome: dados.nome,
           cpf: dados.cpf,
           dataNascimento: new Date(dados.dataNascimento),
-          plano: dados.plano,
+          planoId: dados.planoId,
         },
+        include: { plano: true },
       })
 
       console.log(`Paciente criado com ID: ${paciente.id}`)
@@ -27,6 +28,7 @@ class PacienteRepository {
         skip,
         take,
         orderBy: { id: 'desc' },
+        include: { plano: true },
       })
 
       return pacientes
@@ -41,6 +43,7 @@ class PacienteRepository {
     try {
       const paciente = await prisma.paciente.findUnique({
         where: { id:id },
+        include: { plano: true },
       })
 
       return paciente
@@ -61,8 +64,9 @@ class PacienteRepository {
           ...(dados.dataNascimento && {
             dataNascimento: new Date(dados.dataNascimento),
           }),
-          ...(dados.plano && { plano: dados.plano }),
+          ...(dados.planoId && { planoId: dados.planoId }),
         },
+        include: { plano: true },
       })
 
       return paciente

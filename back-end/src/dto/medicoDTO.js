@@ -20,7 +20,11 @@ function toResponse(medico) {
         cpf: medico.cpf,
         crm: medico.crm,
         dataNascimento: formatDateToBrazilian(medico.dataNascimento),
-        plano: medico.plano,
+        plano: medico.plano ? {
+            id: medico.plano.id,
+            nome: medico.plano.nome,
+            valor: medico.plano.valor.toString(),
+        } : null,
         createdAt: formatDateTime(medico.createdAt),
         updatedAt: formatDateTime(medico.updatedAt),
     }   

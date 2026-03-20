@@ -10,29 +10,29 @@ function validarPaciente(dados) {
   }
 
   if (!dados.cpf) {
-      erros.push('O CPF é obrigatório.');
+    erros.push('O CPF é obrigatório.')
   } else {
+    const cpfLimpo = String(dados.cpf).replace(/[^\d]/g, '')
 
-    //Remove tudo que não for número (pontos, traços, espaços, letras)
-  const cpfLimpo = String(dados.cpf).replace(/[^\d]/g, '');
+    if (cpfLimpo.length !== 11) {
+      erros.push('O CPF deve ter exatamente 11 dígitos numéricos.')
+    }
 
-    
-  if (cpfLimpo.length !== 11) {
-      erros.push('O CPF deve ter exatamente 11 dígitos numéricos.');
-    }  
-    dados.cpf = cpfLimpo; 
+    dados.cpf = cpfLimpo
   }
 
   if (!dados.dataNascimento) {
     erros.push('Data de nascimento é obrigatória')
   }
 
-
-  const planoNumerico = Number(dados.plano)
-  if (![1, 2, 3].includes(planoNumerico)) {
-    erros.push('Plano deve ser 1, 2 ou 3')
+  if (!dados.plano || !dados.plano.trim()) {
+    erros.push('Plano é obrigatório')
   }
-  dados.plano = planoNumerico
+
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+  if (dados.plano && !uuidRegex.test(String(dados.plano).trim())) {
+    erros.push('Plano deve ser um UUID válido')
+  }
 
   return {
     valido: erros.length === 0,
