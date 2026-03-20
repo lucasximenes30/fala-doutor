@@ -95,6 +95,9 @@ async atualizar(id, dados) {
       erro.status = 404;
       throw erro;
     }
+
+    dados.planoId = dados.plano;
+    delete dados.plano;
   }
 
   return await PacienteRepository.atualizar(id, dados)

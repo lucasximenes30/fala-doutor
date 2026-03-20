@@ -66,6 +66,7 @@ class PacienteRepository {
           }),
           ...(dados.planoId && { planoId: dados.planoId }),
         },
+        include: { plano: true },
       })
 
       return paciente

@@ -25,7 +25,9 @@ export default function MedicoCard({ medico, onEdit, onDelete }) {
           
           <div className="bg-gray-900/60 rounded-2xl p-4 border border-emerald-900/30 transform transition-all group-hover:scale-[1.02]">
             <p className="text-gray-500 text-xs uppercase tracking-widest font-bold mb-1">Plano</p>
-            <p className="text-emerald-400 text-xl font-bold tracking-wide">{medico.plano}</p>
+            <p className="text-emerald-400 text-xl font-bold tracking-wide">
+              {medico.plano?.nome || medico.plano || 'N/A'}
+            </p>
           </div>
         </div>
 

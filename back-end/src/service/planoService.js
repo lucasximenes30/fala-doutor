@@ -71,6 +71,28 @@ class PlanoService {
 
     async deletar(id) {
         await this.buscarPorId(id);
+        
+        // Verifica se há pacientes usando este plano
+        const pacientesComPlano = await prisma.paciente.count({
+            where: { planoId: id }
+        });
+        
+        // Verifica se há médicos usando este plano
+        const medicosComPlano = await prisma.medico.count({
+            where: { planoId: id }
+        });
+        
+        if (pacientesComPlano > 0 || medicosComPlano > 0) {
+            const erro = new Error('Você não pode excluir planos que estão em uso!');
+            erro.status = 409;
+            erro.detalhes = {
+                pacientes: pacientesComPlano,
+                medicos: medicosComPlano,
+                mensagem: `Este plano está sendo utilizado por ${pacientesComPlano} paciente(s) e ${medicosComPlano} médico(s)`
+            };
+            throw erro;
+        }
+        
         return await planoRepository.deletar(id);
     }
 

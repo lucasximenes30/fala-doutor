@@ -1,4 +1,7 @@
 import { useState, useEffect } from 'react'
+import axios from 'axios'
+
+const API_BASE_URL = 'http://localhost:3000'
 
 export default function MedicoForm({ onSubmit, onCancel, initialData }) {
   const [formData, setFormData] = useState({
@@ -8,6 +11,29 @@ export default function MedicoForm({ onSubmit, onCancel, initialData }) {
     dataNascimento: '',
     plano: '',
   })
+  const [planos, setPlanos] = useState([])
+  const [loadingPlanos, setLoadingPlanos] = useState(false)
+
+  useEffect(() => {
+    // Carrega os planos quando o componente monta
+    const fetchPlanos = async () => {
+      setLoadingPlanos(true)
+      try {
+        const response = await axios.get(`${API_BASE_URL}/planos`)
+        let planosData = []
+        if (response.data?.dados) {
+          planosData = Array.isArray(response.data.dados) ? response.data.dados : response.data.dados.planos || []
+        }
+        setPlanos(planosData)
+      } catch (err) {
+        console.error('Erro ao carregar planos:', err)
+      } finally {
+        setLoadingPlanos(false)
+      }
+    }
+    
+    fetchPlanos()
+  }, [])
 
   useEffect(() => {
     if (initialData) {
@@ -26,7 +52,7 @@ export default function MedicoForm({ onSubmit, onCancel, initialData }) {
         cpf: initialData.cpf,
         crm: initialData.crm,
         dataNascimento: dataNascimentoFormatada,
-        plano: initialData.plano,
+        plano: initialData.plano?.id || initialData.plano || '',
       })
     }
   }, [initialData])
@@ -110,12 +136,17 @@ export default function MedicoForm({ onSubmit, onCancel, initialData }) {
           value={formData.plano}
           onChange={handleChange}
           required
-          className="w-full px-5 py-4 text-center bg-gray-900 border-2 border-gray-600 rounded-xl text-gray-300 text-lg focus:border-cyan-400 focus:bg-gray-800 outline-none transition-all duration-300 appearance-none"
+          disabled={loadingPlanos}
+          className="w-full px-5 py-4 text-center bg-gray-900 border-2 border-gray-600 rounded-xl text-gray-300 text-lg focus:border-cyan-400 focus:bg-gray-800 outline-none transition-all duration-300 appearance-none disabled:opacity-50"
         >
-          <option value="">Selecione um plano</option>
-          <option value="1">Plano 1</option>
-          <option value="2">Plano 2</option>
-          <option value="3">Plano 3</option>
+          <option value="">
+            {loadingPlanos ? 'Carregando planos...' : 'Selecione um plano'}
+          </option>
+          {planos.map((plano) => (
+            <option key={plano.id} value={plano.id}>
+              {plano.nome} - R$ {parseFloat(plano.valor).toFixed(2)}
+            </option>
+          ))}
         </select>
       </div>
 

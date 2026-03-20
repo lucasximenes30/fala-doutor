@@ -2,6 +2,7 @@ import { useState } from 'react'
 import './App.css'
 import PacientesList from './components/PacientesList'
 import MedicosList from './components/MedicosList'
+import PlanosList from './components/PlanosList'
 
 function App() {
   const [activeTab, setActiveTab] = useState('pacientes')
@@ -45,12 +46,26 @@ function App() {
                 <div className="absolute bottom-0 left-0 right-0 h-1 bg-linear-to-r from-cyan-400 to-blue-400 rounded-t"></div>
               )}
             </button>
+            <button
+              onClick={() => setActiveTab('planos')}
+              className={`px-6 sm:px-8 py-3 font-bold text-lg sm:text-xl transition-all duration-300 relative ${
+                activeTab === 'planos'
+                  ? 'text-cyan-400'
+                  : 'text-gray-400 hover:text-cyan-300'
+              }`}
+            >
+              📋 Planos
+              {activeTab === 'planos' && (
+                <div className="absolute bottom-0 left-0 right-0 h-1 bg-linear-to-r from-cyan-400 to-blue-400 rounded-t"></div>
+              )}
+            </button>
           </div>
 
           {/* Tab Content */}
           <div className="animate-fadeIn w-full mt-6 sm:mt-8">
             {activeTab === 'pacientes' && <PacientesList />}
             {activeTab === 'medicos' && <MedicosList />}
+            {activeTab === 'planos' && <PlanosList />}
           </div>
         </div>
       </div>
