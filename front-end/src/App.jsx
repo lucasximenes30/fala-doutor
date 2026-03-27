@@ -3,6 +3,7 @@ import './App.css'
 import PacientesList from './components/PacientesList'
 import MedicosList from './components/MedicosList'
 import PlanosList from './components/PlanosList'
+import ConsultasList from './components/ConsultasList'
 
 function App() {
   const [activeTab, setActiveTab] = useState('pacientes')
@@ -14,7 +15,7 @@ function App() {
           <h1 className="text-5xl sm:text-6xl font-extrabold bg-linear-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent mb-3 sm:mb-4 tracking-tight drop-shadow-sm">
             Fala Doutor!
           </h1>
-          <p className="text-gray-300 text-lg sm:text-xl font-medium tracking-wide">Gerenciamento de Pacientes e Médicos</p>
+          <p className="text-gray-300 text-lg sm:text-xl font-medium tracking-wide">Gerenciamento de Pacientes, Médicos e Consultas</p>
         </div>
 
         <div className="w-full max-w-6xl mx-auto flex flex-col items-center gap-8 sm:gap-12">
@@ -59,6 +60,19 @@ function App() {
                 <div className="absolute bottom-0 left-0 right-0 h-1 bg-linear-to-r from-cyan-400 to-blue-400 rounded-t"></div>
               )}
             </button>
+            <button
+              onClick={() => setActiveTab('consultas')}
+              className={`px-6 sm:px-8 py-3 font-bold text-lg sm:text-xl transition-all duration-300 relative ${
+                activeTab === 'consultas'
+                  ? 'text-cyan-400'
+                  : 'text-gray-400 hover:text-cyan-300'
+              }`}
+            >
+              📅 Consultas
+              {activeTab === 'consultas' && (
+                <div className="absolute bottom-0 left-0 right-0 h-1 bg-linear-to-r from-cyan-400 to-blue-400 rounded-t"></div>
+              )}
+            </button>
           </div>
 
           {/* Tab Content */}
@@ -66,6 +80,7 @@ function App() {
             {activeTab === 'pacientes' && <PacientesList />}
             {activeTab === 'medicos' && <MedicosList />}
             {activeTab === 'planos' && <PlanosList />}
+            {activeTab === 'consultas' && <ConsultasList />}
           </div>
         </div>
       </div>

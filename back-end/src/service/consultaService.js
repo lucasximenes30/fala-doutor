@@ -13,6 +13,16 @@ class ConsultaService {
             throw erro;
         }
 
+        // Valida se a data/hora é anterior a agora
+        const dataSelecionada = new Date(dados.data);
+        const agora = new Date();
+
+        if (dataSelecionada <= agora) {
+            const erro = new Error('Consulta deve ser agendada para uma hora futura');
+            erro.status = 400;
+            throw erro;
+        }
+
         // Verifica se o médico existe
         const medicoExiste = await prisma.medico.findUnique({
             where: { id: dados.medico },
@@ -106,6 +116,18 @@ class ConsultaService {
                 const erro = new Error('Dados inválidos');
                 erro.detalhes = validacao.erros;
                 throw erro;
+            }
+
+            // Valida se a data/hora é anterior a agora (se foi fornecida)
+            if (dados.data) {
+                const dataSelecionada = new Date(dados.data);
+                const agora = new Date();
+
+                if (dataSelecionada <= agora) {
+                    const erro = new Error('Consulta deve ser agendada para uma hora futura');
+                    erro.status = 400;
+                    throw erro;
+                }
             }
 
             // Se tiver atualizando o médico ou paciente, valida as relações

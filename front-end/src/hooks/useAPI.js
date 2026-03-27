@@ -18,13 +18,15 @@ export const useAPI = (endpoint) => {
       // Extrai dados da resposta estruturada da API
       if (response.data?.dados) {
         const dados = response.data.dados
-        // Se existe 'pacientes', 'medicos' ou 'planos', usa aquele array
+        // Se existe 'pacientes', 'medicos', 'planos' ou 'consultas', usa aquele array
         if (Array.isArray(dados.pacientes)) {
           items = dados.pacientes
         } else if (Array.isArray(dados.medicos)) {
           items = dados.medicos
         } else if (Array.isArray(dados.planos)) {
           items = dados.planos
+        } else if (Array.isArray(dados.consultas)) {
+          items = dados.consultas
         } else if (Array.isArray(dados)) {
           items = dados
         }
