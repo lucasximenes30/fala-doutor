@@ -9,6 +9,7 @@ const { connectDB } = require('./config/database')
 const pacienteRoutes = require('./routes/pacienteRoutes')
 const medicoRoutes = require('./routes/medicoRoutes')
 const planoRoutes = require('./routes/planoRoutes')
+const consultaRoutes = require('./routes/consultaRoutes')
 
 const app = express()
 const PORT = process.env.PORT || 3000
@@ -38,6 +39,9 @@ app.use('/medicos', medicoRoutes)
 //Rotas de plano
 app.use('/planos', planoRoutes)
 
+//Rotas de Consulta
+app.use('/consultas', consultaRoutes)
+
 app.use((req, res) => {
   res.status(404).json({
     sucesso: false,
@@ -57,7 +61,8 @@ async function iniciarServidor() {
       console.log(`\nServidor rodando em: http://localhost:${PORT}\n`)
       console.log(`API de Pacientes disponível em: http://localhost:${PORT}/pacientes`)
       console.log(`API de Médicos disponível em: http://localhost:${PORT}/medicos`)
-      console.log(`API de Planos disponível em: http://localhost:${PORT}/planos\n`)
+      console.log(`API de Planos disponível em: http://localhost:${PORT}/planos`)
+      console.log(`API de Consultas disponível em: http://localhost:${PORT}/consultas\n`)
     })
   } catch (erro) {
     console.error('Erro ao iniciar servidor:', erro)
