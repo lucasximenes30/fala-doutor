@@ -10,38 +10,58 @@ datasource db {
 model Plano {
   id        String    @id @default(uuid()) @db.Uuid
   nome      String    @db.VarChar(255)
-  valor Decimal @db.Decimal(10,2)
+  valor     Decimal   @db.Decimal(10,2)
 
   pacientes Paciente[]
   medicos   Medico[]
 
   createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  updatedAt DateTime  @default(now()) @updatedAt
 }
 
 model Paciente {
-  id              String   @id @default(uuid()) @db.Uuid
-  nome            String   @db.VarChar(255)
-  cpf             String   @unique @db.VarChar(11)
+  id              String     @id @default(uuid()) @db.Uuid
+  nome            String     @db.VarChar(255)
+  cpf             String     @unique @db.VarChar(11)
   dataNascimento  DateTime
 
-  planoId         String   @db.Uuid
-  plano           Plano    @relation(fields: [planoId], references: [id])
+  planoId         String     @db.Uuid
+  plano           Plano      @relation(fields: [planoId], references: [id])
 
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  consultas       Consulta[]
+
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @default(now()) @updatedAt
 }
 
 model Medico {
-  id              String   @id @default(uuid()) @db.Uuid
-  nome            String   @db.VarChar(255)
-  cpf             String   @unique @db.VarChar(11)
-  crm             String   @unique @db.VarChar(30)
+  id              String     @id @default(uuid()) @db.Uuid
+  nome            String     @db.VarChar(255)
+  cpf             String     @unique @db.VarChar(11)
+  crm             String     @unique @db.VarChar(30)
   dataNascimento  DateTime
 
-  planoId         String   @db.Uuid
-  plano           Plano    @relation(fields: [planoId], references: [id])
+  planoId         String     @db.Uuid
+  plano           Plano      @relation(fields: [planoId], references: [id])
 
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  consultas       Consulta[]
+
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @default(now()) @updatedAt
+}
+
+model Consulta {
+  id          String     @id @default(uuid()) @db.Uuid
+  data        DateTime
+
+  medicoId    String     @db.Uuid
+  medico      Medico     @relation(fields: [medicoId], references: [id])
+
+  pacienteId  String     @db.Uuid
+  paciente    Paciente   @relation(fields: [pacienteId], references: [id])
+
+  valor       Decimal    @db.Decimal(10,2)
+
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @default(now()) @updatedAt
 }
