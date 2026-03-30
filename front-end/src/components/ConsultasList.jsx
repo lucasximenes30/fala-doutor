@@ -67,7 +67,7 @@ export default function ConsultasList() {
             onClick={() => setShowForm(true)}
             className="w-full sm:w-2/3 md:w-1/2 py-4 px-8 text-lg bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-xl font-bold hover:shadow-cyan-500/20 hover:shadow-xl transition-all duration-300 text-center transform hover:-translate-y-1"
           >
-            + Agendar Nova Consulta
+            Agendar Nova Consulta
           </button>
         )}
 

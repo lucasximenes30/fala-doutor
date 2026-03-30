@@ -15,7 +15,7 @@ function App() {
           <h1 className="text-5xl sm:text-6xl font-extrabold bg-linear-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent mb-3 sm:mb-4 tracking-tight drop-shadow-sm">
             Fala Doutor!
           </h1>
-          <p className="text-gray-300 text-lg sm:text-xl font-medium tracking-wide">Gerenciamento de Pacientes, Médicos e Consultas</p>
+          <p className="text-gray-300 text-lg sm:text-xl font-medium tracking-wide">Gerenciamento do sistema.</p>
         </div>
 
         <div className="w-full max-w-6xl mx-auto flex flex-col items-center gap-8 sm:gap-12">
